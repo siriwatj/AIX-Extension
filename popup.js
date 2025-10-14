@@ -4,18 +4,41 @@ const resultEl = document.getElementById('result');
 const resultContainer = document.getElementById('resultContainer');
 const copyBtn = document.getElementById('copy');
 
+async function initializeSummarizer() {
+  //const availability = await Summarizer.availability();
+  const summarizer = await Summarizer.create({
+                        type: "headline",
+                        outputLanguage: "en",
+                        length: "short"
+                      });
+  return summarizer;
+}
+
 // On popup open, load any last selection saved by the context menu
-chrome.storage.local.get(['lastSelection'], (items) => {
+chrome.storage.local.get(['lastSelection'], async (items) => {
   const last = items?.lastSelection || '';
   if(last && last.trim()){
-    const first10 = firstNWords(last, 10);
-    resultEl.textContent = first10 || '[No selection found]';
+    // const first10 = firstNWords(last, 10);
+    const sumText = await summarizeThis(last);
+    resultEl.textContent = sumText || '[No selection found]';
     resultContainer.classList.remove('hidden');
     statusEl.textContent = 'Loaded last selection';
   }
 });
 
-
+async function summarizeThis(text) {
+  try {
+    const summarizer = await initializeSummarizer();
+    if (summarizer) {
+      const summary = await summarizer.summarize(text);
+      return summary;
+    }
+    return '[Unable to initialize summarizer]';
+  } catch (error) {
+    console.error('Summarization error:', error);
+    return '[Error summarizing text]';
+  }
+}
 function firstNWords(text, n){
   if(!text) return '';
   // Normalize whitespace and split
@@ -58,7 +81,8 @@ extractBtn.addEventListener('click', async () => {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
     const selected = await getSelectionFromPage(tab.id);
     const first10 = firstNWords(selected, 10);
-    resultEl.textContent = first10 || '[No selection found]';
+    // resultEl.textContent = first10 || '[No selection found]';
+    resultEl.textContent = 'xxx' || '[No selection found]';
     resultContainer.classList.remove('hidden');
     statusEl.textContent = 'Done';
   }catch(err){
