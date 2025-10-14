@@ -9,7 +9,8 @@ async function initializeSummarizer() {
   const summarizer = await Summarizer.create({
                         type: "headline",
                         outputLanguage: "en",
-                        length: "short"
+                        length: "short",
+                        format: "plain-text"
                       });
   return summarizer;
 }
@@ -22,7 +23,6 @@ chrome.storage.local.get(['lastSelection'], async (items) => {
     const sumText = await summarizeThis(last);
     resultEl.textContent = sumText || '[No selection found]';
     resultContainer.classList.remove('hidden');
-    statusEl.textContent = 'Loaded last selection';
   }
 });
 
