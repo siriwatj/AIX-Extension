@@ -39,12 +39,6 @@ async function summarizeThis(text) {
     return '[Error summarizing text]';
   }
 }
-function firstNWords(text, n){
-  if(!text) return '';
-  // Normalize whitespace and split
-  const words = text.replace(/\s+/g,' ').trim().split(' ');
-  return words.slice(0, n).join(' ');
-}
 
 // Gets selection from page; fallbacks: active element value or placeholder
 async function getSelectionFromPage(tabId){
@@ -72,23 +66,6 @@ async function getSelectionFromPage(tabId){
     return '';
   }
 }
-
-extractBtn.addEventListener('click', async () => {
-  statusEl.textContent = 'Getting selection...';
-  resultContainer.classList.add('hidden');
-  resultEl.textContent = '';
-  try{
-    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    const selected = await getSelectionFromPage(tab.id);
-    const first10 = firstNWords(selected, 10);
-    // resultEl.textContent = first10 || '[No selection found]';
-    resultEl.textContent = 'xxx' || '[No selection found]';
-    resultContainer.classList.remove('hidden');
-    statusEl.textContent = 'Done';
-  }catch(err){
-    statusEl.textContent = 'Error: ' + err.message;
-  }
-});
 
 copyBtn.addEventListener('click', async () => {
   const txt = resultEl.textContent;
