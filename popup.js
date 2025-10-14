@@ -7,7 +7,7 @@ const copyBtn = document.getElementById('copy');
 async function initializeSummarizer() {
   //const availability = await Summarizer.availability();
   const summarizer = await Summarizer.create({
-                        type: "headline",
+                        type: "tldr",
                         outputLanguage: "en",
                         length: "short",
                         format: "plain-text"
@@ -21,7 +21,10 @@ chrome.storage.local.get(['lastSelection'], async (items) => {
   if(last && last.trim()){
     // const first10 = firstNWords(last, 10);
     const sumText = await summarizeThis(last);
-    resultEl.textContent = sumText || '[No selection found]';
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tabUrl = tab?.url || '';
+    const sumTextwithURL = sumText + '\n\nSource: ' + tabUrl;
+    resultEl.textContent = sumTextwithURL || '[No selection found]';
     resultContainer.classList.remove('hidden');
   }
 });
