@@ -2,7 +2,18 @@ const statusEl = document.getElementById('status');
 const extractBtn = document.getElementById('extract');
 const resultEl = document.getElementById('result');
 const resultContainer = document.getElementById('resultContainer');
+const loadingContainer = document.getElementById('loadingContainer');
 const copyBtn = document.getElementById('copy');
+
+function showLoading() {
+  loadingContainer.classList.remove('hidden');
+  resultContainer.classList.add('hidden');
+}
+
+function hideLoading() {
+  loadingContainer.classList.add('hidden');
+  resultContainer.classList.remove('hidden');
+}
 
 async function initializeSummarizer() {
   //const availability = await Summarizer.availability();
@@ -15,18 +26,26 @@ async function initializeSummarizer() {
   return summarizer;
 }
 
-// On popup open, load any last selection saved by the context menu
-chrome.storage.local.get(['lastSelection'], async (items) => {
-  const last = items?.lastSelection || '';
-  if(last && last.trim()){
-    // const first10 = firstNWords(last, 10);
-    const sumText = await summarizeThis(last);
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    const tabUrl = tab?.url || '';
-    const sumTextwithURL = sumText + '\n\nSource: ' + tabUrl;
+// On popup open, get current selection and summarize
+chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+  const tab = tabs[0];
+  if (!tab) return;
+
+  // Try getting current selection first
+  const selection = await getSelectionFromPage(tab.id);
+  if (selection && selection.trim()) {
+    showLoading();
+    const sumText = await summarizeThis(selection);
+    const sumTextwithURL = sumText + '\n\nSource: ' + tab.url;
     resultEl.textContent = sumTextwithURL || '[No selection found]';
-    resultContainer.classList.remove('hidden');
+    hideLoading();
+    return;
   }
+
+  // If no selection, show instructions
+  resultEl.innerHTML = '<h3>[No selection found]</h3>';
+  resultEl.innerHTML += '<p>Select text on the page and reopen the popup to summarize.</p>';
+  resultContainer.classList.remove('hidden');
 });
 
 async function summarizeThis(text) {
