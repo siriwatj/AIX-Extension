@@ -46,6 +46,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
   resultEl.innerHTML = '<h3>[No selection found]</h3>';
   resultEl.innerHTML += '<p>Select text on the page and reopen the popup to summarize.</p>';
   resultContainer.classList.remove('hidden');
+  
+  //hidecopybutton
+  copyBtn.style.display = 'none';
+
 });
 
 async function summarizeThis(text) {
