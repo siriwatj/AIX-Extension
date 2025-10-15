@@ -94,8 +94,8 @@ copyBtn.addEventListener('click', async () => {
   if(!txt) return;
   try{
     await navigator.clipboard.writeText(txt);
-    statusEl.textContent = 'Copied';
-    setTimeout(()=> statusEl.textContent = 'Ready', 1200);
+    statusEl.innerHTML = 'Copied - <a href="https://aqua-linet-16.tiiny.site" target="_blank" rel="noopener noreferrer">Buy me a Coffee.</a>';
+    setTimeout(()=> statusEl.textContent = 'Ready', 4800);
   }catch(e){
     statusEl.textContent = 'Copy failed';
   }
