@@ -1,17 +1,85 @@
-# Selected Text — First 10 Words Extension
+# AI-Powered Text Summarizer Chrome Extension
 
-This Chrome extension extracts the currently selected text from the active page (or falls back to the focused input/textarea or first contenteditable) and displays the first 10 words.
+A powerful Chrome extension that uses AI to generate concise summaries of selected text in various styles and lengths.
 
-Installation
-1. Open chrome://extensions
+## Features
+
+- **Multiple Summarization Styles**
+  - TL;DR: Quick summary of main points
+  - Teaser: Engaging preview of the content
+  - Key Points: Structured list of important information
+  - Headline: Brief, attention-grabbing summary
+
+- **Customizable Summary Length**
+  - Short: Concise overview
+  - Medium: Balanced summary
+  - Long: Detailed summary
+
+- **Smart Text Selection**
+  - Works with selected text on any webpage
+  - Supports text from input fields and textareas
+  - Compatible with contenteditable areas
+
+- **User-Friendly Interface**
+  - Clean, intuitive popup interface
+  - Loading animation during summarization
+  - Easy one-click copy functionality
+  - Shows source URL with summaries
+
+- **Persistent Storage**
+  - Saves your last summary
+  - Remembers previous summarization settings
+  - Displays last summary when no text is selected
+
+## Installation
+
+1. Open `chrome://extensions`
 2. Enable "Developer mode"
 3. Click "Load unpacked" and select this folder (the one containing `manifest.json`)
 
-Usage
-- Select text on a page (or place the cursor in an input/textarea), click the extension icon, then click "Get First 10 Words of Selection".
-- Click "Copy" to copy the result to clipboard.
+## How to Use
 
-Notes
-- The extension uses `window.getSelection()` in the page context; if no selection is found it checks for focused inputs and common contenteditable elements.
-- Some sites using shadow DOM or complex editors may not expose selection in the page context.
-- You can adjust the word count by editing `popup.js` and changing the number passed to `firstNWords`.
+1. **Basic Usage**
+   - Select any text on a webpage
+   - Click the extension icon
+   - View your AI-generated summary in the popup
+   - The summary includes the source URL for reference
+
+2. **Customization**
+   - Right-click the extension icon and select "Options"
+   - Choose your preferred summarization style:
+     - TL;DR
+     - Teaser
+     - Key Points
+     - Headline
+   - Select your desired summary length:
+     - Short
+     - Medium
+     - Long
+
+3. **Additional Features**
+   - Click "Copy" to copy the summary to your clipboard
+   - Previous summaries are saved and shown when no new text is selected
+   - The title shows your current style and length settings (e.g., "TL;DR (Short)")
+
+## Tips
+
+- For best results, select complete paragraphs or articles
+- Different summarization styles work better for different types of content
+- Adjust the length based on your needs and the original text length
+- Your last summary is always available, even without new text selection
+
+## Technical Notes
+
+- Uses `window.getSelection()` to capture text from web pages
+- Falls back to focused inputs and contenteditable elements if no selection is found
+- Stores settings and previous summaries in Chrome storage
+- Some sites using shadow DOM or complex editors may not expose selection in the page context
+
+## Support
+
+If you find this extension helpful, consider [buying me a coffee](https://aqua-linet-16.tiiny.site).
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
