@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Selected Text First 10 Words",
+  "name": "Summarize Selected Text",
   "version": "1.0.0",
-  "description": "Extract selected text from the current page and display the first 10 words.",
+  "description": "AI-powered text summarizer that generates concise summaries in various styles (TL;DR, Teaser, Key Points, Headline) and lengths.",
   "permissions": ["scripting", "activeTab", "storage", "contextMenus"],
   "options_page": "options.html",
   "host_permissions": ["<all_urls>"],
