@@ -59,18 +59,37 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     showLoading();
     const sumText = await summarizeThis(selection);
     const sumTextwithURL = sumText + '\n\nSource: ' + tab.url;
+    // Get the current title
+    const currentTitle = document.querySelector('#resultContainer h2').textContent;
+    // Store the summary, URL, and title for future use
+    chrome.storage.local.set({
+      lastSummary: sumText,
+      lastUrl: tab.url,
+      lastTitle: currentTitle
+    });
     resultEl.textContent = sumTextwithURL;
     hideLoading();
     return;
   }
 
-  // If no selection, show instructions
-  resultEl.innerHTML = '<h3>[No selection found]</h3>';
-  resultEl.innerHTML += '<p>Select text on the page and reopen the popup to summarize.</p>';
-  resultContainer.classList.remove('hidden');
-  
-  //hidecopybutton
-  copyBtn.style.display = 'none';
+  // If no selection, try to show previous summary
+  chrome.storage.local.get(['lastSummary', 'lastUrl', 'lastTitle'], (items) => {
+    if (items.lastSummary) {
+      // Restore the title if available, otherwise let initializeSummarizer set it
+      if (items.lastTitle) {
+        document.querySelector('#resultContainer h2').textContent = items.lastTitle;
+      }
+      resultEl.textContent = items.lastSummary + '\n\nSource: ' + (items.lastUrl || '');
+      resultContainer.classList.remove('hidden');
+      copyBtn.style.display = 'block';
+    } else {
+      // If no previous summary, show instructions
+      resultEl.innerHTML = '<h3>[No selection found]</h3>';
+      resultEl.innerHTML += '<p>Select text on the page and reopen the popup to summarize.</p>';
+      resultContainer.classList.remove('hidden');
+      copyBtn.style.display = 'none';
+    }
+  });
 
 });
 
