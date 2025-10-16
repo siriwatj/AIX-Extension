@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Summarizer Options</title>
+  <style>
+    body {
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    .option-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    select {
+      padding: 5px;
+      width: 200px;
+      margin-bottom: 10px;
+    }
+    #status {
+      color: #4CAF50;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Summarizer Options</h2>
+  
+  <div class="option-group">
+    <label for="type">Summarization Type:</label>
+    <select id="type">
+      <option value="tldr">TLDR</option>
+      <option value="teaser">Teaser</option>
+      <option value="key-points">Key Points</option>
+      <option value="headline">Headline</option>
+    </select>
+  </div>
+
+  <div class="option-group">
+    <label for="length">Summary Length:</label>
+    <select id="length">
+      <option value="short">Short</option>
+      <option value="medium">Medium</option>
+      <option value="long">Long</option>
+    </select>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

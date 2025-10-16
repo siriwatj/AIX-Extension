@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Extract selected text from the current page and display the first 10 words.",
   "permissions": ["scripting", "activeTab", "storage", "contextMenus"],
+  "options_page": "options.html",
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"

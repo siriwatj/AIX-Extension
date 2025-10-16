@@ -17,12 +17,34 @@ function hideLoading() {
 
 async function initializeSummarizer() {
   //const availability = await Summarizer.availability();
+  const options = await chrome.storage.sync.get({
+    // Default values
+    summarizerType: 'tldr',
+    summarizerLength: 'short'
+  });
+
+  // Update the title based on the type and length
+  const titleMap = {
+    'tldr': 'TL;DR',
+    'teaser': 'Teaser',
+    'key-points': 'Key Points',
+    'headline': 'Headline'
+  };
+  const lengthMap = {
+    'short': 'Short',
+    'medium': 'Medium',
+    'long': 'Long'
+  };
+  const typeTitle = titleMap[options.summarizerType] || 'TL;DR';
+  const lengthTitle = lengthMap[options.summarizerLength] || 'Short';
+  document.querySelector('#resultContainer h2').textContent = `${typeTitle} (${lengthTitle})`;
+
   const summarizer = await Summarizer.create({
-                        type: "tldr",
-                        outputLanguage: "en",
-                        length: "short",
-                        format: "plain-text"
-                      });
+    type: options.summarizerType,
+    outputLanguage: "en",
+    length: options.summarizerLength,
+    format: "plain-text" // Always use plain-text format
+  });
   return summarizer;
 }
 
@@ -37,7 +59,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     showLoading();
     const sumText = await summarizeThis(selection);
     const sumTextwithURL = sumText + '\n\nSource: ' + tab.url;
-    resultEl.textContent = sumTextwithURL || '[No selection found]';
+    resultEl.textContent = sumTextwithURL;
     hideLoading();
     return;
   }
